@@ -7,6 +7,10 @@ const Home = () => {
 	const [tasks, setTasks] = useState(["No tasks here, add tasks"]);
 
 	
+	useEffect(() => {
+		getUsers();
+	  }, []);
+	
 	const TaskChanger = (event) => {
 		if (event.target.value !== "") {setNewTask(event.target.value)}
 	}
@@ -22,11 +26,46 @@ const Home = () => {
 			}	
 		}
 	}
-
 	const deteleTask = (event, item) => {
 		setTasks(tasks.filter((i) => i !== item));
 	}
 
+	const getUsers = () =>{
+		fetch('https://playground.4geeks.com/todo/users?offset=0&limit=100', {
+			method: "GET",
+			headers: {
+			  "Content-Type": "application/json"
+			}
+		  })
+		  .then(resp => {
+			  console.log(`resp.ok: ${resp.ok}`); // Será true si la respuesta es exitosa
+			  console.log(`resp.status: ${resp.status}`); // El código de estado 200, 300, 400, etc.
+			 //console.log(`resp.text(): ${resp.text()}`); // Intentará devolver el resultado exacto como string
+			  return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
+		  })
+		  .then(data => {
+			const arrayData = data.users; // Asegúrate de acceder al array en la clave correcta
+			console.log("arrayData: ", arrayData)
+			/*arrayData.forEach(element => {
+				console.log(element)
+			});*/
+			if (arrayData.find((value) => {value.name === "bdiaz"})) {
+				console.log("Si existe")
+			}else {
+				arrayData.forEach(element => {
+					if (element.name === "bdiaz") {
+						console.log(element)
+					}
+					console.log(element.name)
+				});
+			}
+
+		  })
+		  .catch(error => {
+			  // Manejo de errores
+			  console.log(error);
+		  });
+	}
 
 	return (
 		<div className="container mt-5">
