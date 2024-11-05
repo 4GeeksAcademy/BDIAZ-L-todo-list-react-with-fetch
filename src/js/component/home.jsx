@@ -44,22 +44,10 @@ const Home = () => {
 			  return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
 		  })
 		  .then(data => {
-			const arrayData = data.users; // Asegúrate de acceder al array en la clave correcta
-			console.log("arrayData: ", arrayData)
-			/*arrayData.forEach(element => {
-				console.log(element)
-			});*/
-			if (arrayData.find((value) => {value.name === "bdiaz"})) {
-				console.log("Si existe")
-			}else {
-				arrayData.forEach(element => {
-					if (element.name === "bdiaz") {
-						console.log(element)
-					}
-					console.log(element.name)
-				});
-			}
+			const users = data.users; // Asegúrate de acceder al array en la clave correcta
+			console.log("arrayData: ", users)
 
+			console.log(users.find((user, index, array) => {return user.name === "bdiaz"}));
 		  })
 		  .catch(error => {
 			  // Manejo de errores
