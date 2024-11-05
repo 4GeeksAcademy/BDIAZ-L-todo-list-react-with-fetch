@@ -4,12 +4,12 @@ import React, {useState, useEffect}from "react";
 const Home = () => {
 
 	const [newTask, setNewTask] = useState("");
-	const [tasks, setTasks] = useState(["No tasks here, add tasks"]);
+	const [tasks, setTasks] = useState([{label: "No tasks here, add tasks"}]);
 
 	
 	useEffect(() => {
 		getUsers();
-	  }, []);
+	  }, [tasks]);
 	
 	const TaskChanger = (event) => {
 		if (event.target.value !== "") {setNewTask(event.target.value)}
@@ -17,12 +17,14 @@ const Home = () => {
 	const addTask = (event) => {
 		if (event.target.value !== "") {
 			if (event.key == "Enter") {
-				if (tasks[0] === "No tasks here, add tasks") {
+				if (tasks[0] === "") {
 					tasks[0] = newTask;
 				} else {
 					tasks.push(newTask);
 				}
+				addTodo(newTask);
 				setNewTask("")
+
 			}	
 		}
 	}
@@ -45,9 +47,15 @@ const Home = () => {
 		  })
 		  .then(data => {
 			const users = data.users; // Asegúrate de acceder al array en la clave correcta
-			console.log("arrayData: ", users)
+			console.log("getUsers: ", users)
+			if (users.find((user) => {return user.name === "bdiaz"})) {
 
-			console.log(users.find((user, index, array) => {return user.name === "bdiaz"}));
+				getTodos(); 
+			}else {
+				console.log("createUser")
+				createUser(); //pendiente de checar
+			}
+			
 		  })
 		  .catch(error => {
 			  // Manejo de errores
@@ -55,13 +63,93 @@ const Home = () => {
 		  });
 	}
 
+	const createUser = () => {
+		fetch('https://playground.4geeks.com/todo/user/bdiaz', {
+			method: "POST",
+			headers: {
+			  "Content-Type": "application/json"
+			}
+		  })
+		  .then(resp => {
+			  console.log(resp.ok); // Será true si la respuesta es exitosa
+			  console.log(resp.status); // El código de estado 200, 300, 400, etc.
+			  console.log(resp.text()); // Intentará devolver el resultado exacto como string
+			  return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
+		  })
+		  .then(data => {
+			console.log("data");
+			  // Aquí es donde debe comenzar tu código después de que finalice la búsqueda
+			  console.log(data); // Esto imprimirá en la consola el objeto exacto recibido del servidor
+		  })
+		  .catch(error => {
+			  // Manejo de errores
+			  console.log(error);
+		  });
+	}
+
+	const getTodos = () => {
+		console.log("getTodos")
+		fetch('https://playground.4geeks.com/todo/users/bdiaz', {
+			method: "GET",
+			headers: {
+			  "Content-Type": "application/json"
+			}
+		  })
+		  .then(resp => {
+			  console.log(`resp.ok: ${resp.ok}`); // Será true si la respuesta es exitosa
+			  console.log(`resp.status: ${resp.status}`); // El código de estado 200, 300, 400, etc.
+			 //console.log(`resp.text(): ${resp.text()}`); // Intentará devolver el resultado exacto como string
+			  return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
+		  })
+		  .then(data => {
+			console.log("arrayData: ", data)
+			console.log("data.todos: ", data.todos)
+			setTasks(data.todos)
+			console.log("Tasks: ", tasks)
+			
+		  })
+		  .catch(error => {
+			  // Manejo de errores
+			  console.log(error);
+		  });
+	}
+
+	const addTodo = (task) => {
+		fetch('https://playground.4geeks.com/todo/todos/bdiaz', {
+			method: "POST",
+			body: JSON.stringify({
+				label: task,
+				is_done: false
+			}),
+			headers: {
+			"Content-Type": "application/json",
+			"accept": "application/json"
+			}
+		})
+		.then(resp => {
+			console.log(resp.ok); // Será true si la respuesta es exitosa
+			console.log(resp.status); // El código de estado 200, 300, 400, etc.
+			console.log(resp.text()); // Intentará devolver el resultado exacto como string
+			return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
+		})
+		.then(data => {
+			// Aquí es donde debe comenzar tu código después de que finalice la búsqueda
+			console.log(data); // Esto imprimirá en la consola el objeto exacto recibido del servidor
+		})
+		.catch(error => {
+			// Manejo de errores
+			console.log(error);
+		});
+	}
+
+
 	return (
 		<div className="container mt-5">
 			<h1 className="todo-header text-center">Todos</h1>
 			<input className="form-control" type="text" onChange={TaskChanger} onKeyDown={addTask} value={newTask} placeholder="Add to do here"/>
 			<ul className="list-group">
 				{tasks.map((item, index) => {
-					return <li key={index} className="list-group-item"><span onClick={(e)=>{deteleTask(e,item)}}><i className="fa fa-trash" item={item}></i></span>{item}</li>
+					return <li key={index} className="list-group-item"><span onClick={(e)=>{deteleTask(e,item)}}><i className="fa fa-trash" item={item}></i></span>{item.label}</li>
 				})}
 				<li className="list-group-item paper"><small className="">{tasks.length} item left</small></li>
 	  		</ul>
