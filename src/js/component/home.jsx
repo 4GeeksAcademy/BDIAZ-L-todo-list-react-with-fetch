@@ -97,9 +97,7 @@ const Home = () => {
 			console.log("data.todos: ", data.todos)
 			data.todos.length === 0 
 				? setTasks([{label: "No tasks here, add tasks"}])
-				: setTasks(data.todos)
-			console.log("Tasks: ", tasks)
-			
+				: setTasks(data.todos)			
 		  })
 		  .catch(error => {
 			  console.log(error);
