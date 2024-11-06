@@ -35,6 +35,7 @@ const Home = () => {
 	}
 
 	const getUsers = () =>{
+		console.log("-----------getUsers----------------")
 		fetch('https://playground.4geeks.com/todo/users?offset=0&limit=100', {
 			method: "GET",
 			headers: {
@@ -59,6 +60,7 @@ const Home = () => {
 	}
 
 	const createUser = () => {
+		console.log("-----------createUser----------------")
 		fetch('https://playground.4geeks.com/todo/users/bdiaz', {
 			method: "POST",
 			headers: {
@@ -81,7 +83,7 @@ const Home = () => {
 	}
 
 	const getTodos = () => {
-		console.log("getTodos")
+		console.log("-----------getTodos----------------")
 		fetch('https://playground.4geeks.com/todo/users/bdiaz', {
 			method: "GET",
 			headers: {
@@ -105,6 +107,7 @@ const Home = () => {
 	}
 
 	const addTodo = (task) => {
+		console.log("-----------addTodo----------------")
 		fetch('https://playground.4geeks.com/todo/todos/bdiaz', {
 			method: "POST",
 			body: JSON.stringify({
@@ -120,7 +123,7 @@ const Home = () => {
 			console.log(resp.ok); 
 			console.log(resp.status); 
 			console.log(resp.text()); 
-			return resp.json(); 
+			return resp; 
 		})
 		.then(data => {
 			console.log(data); 
@@ -132,6 +135,7 @@ const Home = () => {
 	}
 
 	const deleteTodo = (idTask) =>{
+		console.log("-----------deleteTodo----------------")
 		console.log(`idTask: ${idTask}`);
 		fetch('https://playground.4geeks.com/todo/todos/' + idTask, {
 			method: "DELETE",
@@ -141,7 +145,8 @@ const Home = () => {
 		}).then(resp => {
 			console.log(resp.ok); 
 			console.log(resp.status); 
-			return resp.json();
+			console.log(resp.text());
+			return resp;
 		}).then(data => {
 			console.log(data);
 			getTodos();
