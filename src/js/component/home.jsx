@@ -71,7 +71,7 @@ const Home = () => {
 			  console.log(resp.ok); 
 			  console.log(resp.status); 
 			  console.log(resp.text());
-			  return resp.json(); 
+			  return resp; 
 		  })
 		  .then(data => {
 			  console.log("data");
