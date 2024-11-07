@@ -37,7 +37,7 @@ const Home = () => {
 			}
 		  })
 		  .then(resp => {
-			  console.log(`resp.statusText:` , resp.statusText); 
+			  console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
 			  return resp.json(); 
 		  })
 		  .then(data => {
@@ -51,15 +51,16 @@ const Home = () => {
 		  });
 	}
 
-	const createUser = () => {
+	const createUser = async () => {
 		console.log("-----------createUser----------------")
-		fetch('https://playground.4geeks.com/todo/users/bdiaz', {
+		await fetch('https://playground.4geeks.com/todo/users/bdiaz', {
 			method: "POST",
 			headers: {
 			  "Content-Type": "application/json"
 			}
 		  })
 		  .then(resp => {
+			  console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
 			  console.log(resp.ok); 
 			  console.log(resp.status); 
 			  console.log(resp.text());
@@ -74,16 +75,17 @@ const Home = () => {
 		  });
 	}
 
-	const getTodos = () => {
+	const getTodos = async () => {
 		console.log("-----------getTodos----------------")
-		fetch('https://playground.4geeks.com/todo/users/bdiaz', {
+		await fetch('https://playground.4geeks.com/todo/users/bdiaz', {
 			method: "GET",
 			headers: {
 			  "Content-Type": "application/json"
 			}
 		  })
 		  .then(resp => {
-			  console.log(`resp.statusText:` , resp.statusText); 
+			  console.log(`resp:` , resp); 
+			  console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
 			  return resp.json(); 
 		  })
 		  .then(data => {
@@ -97,9 +99,9 @@ const Home = () => {
 		  });
 	}
 
-	const addTodo = (task) => {
+	const addTodo = async (task) => {
 		console.log("-----------addTodo----------------")
-		fetch('https://playground.4geeks.com/todo/todos/bdiaz', {
+		await fetch('https://playground.4geeks.com/todo/todos/bdiaz', {
 			method: "POST",
 			body: JSON.stringify({
 				label: task,
@@ -111,7 +113,11 @@ const Home = () => {
 			}
 		})
 		.then(resp => {
-			console.log(`resp.statusText:` , resp.statusText); 
+			console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
+			if (!resp.ok) {
+				createUser()
+				addTodo(task)
+			}
 			return resp; 
 		})
 		.then(data => {
@@ -132,11 +138,29 @@ const Home = () => {
 				"accept": "application/json"
 				}
 		}).then(resp => {
-			console.log(`resp.statusText:` , resp.statusText); 
+			console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
 			return resp;
 		}).then(data => {
 			console.log(data);
 			getTodos();
+		}).catch (error => {
+			console.log(error);
+		})
+	}
+
+	const deleteAllTasks = () => {
+		console.log("-----------deleteAllTasks----------------")
+		fetch('https://playground.4geeks.com/todo/users/bdiaz', {
+			method: "DELETE",
+			headers: {
+				"accept": "application/json"
+				}
+		}).then(resp => {
+			console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
+			return resp;
+		}).then(data => {
+			console.log(data);
+			setTasks([{label: "No tasks here, add tasks"}])
 		}).catch (error => {
 			console.log(error);
 		})
@@ -152,6 +176,9 @@ const Home = () => {
 				})}
 				<li className="list-group-item paper"><small className="">{tasks.length} item left</small></li>
 	  		</ul>
+			<div className="text-center">
+				<div className="btn btn-danger mt-4" onClick={deleteAllTasks}>Delete all</div>
+			</div>
 		</div>
 
 	);
