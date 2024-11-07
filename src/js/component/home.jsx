@@ -114,10 +114,6 @@ const Home = () => {
 		})
 		.then(resp => {
 			console.log(`resp.status:` , resp.status, `resp.statusText:`, resp.statusText); 
-			if (!resp.ok) {
-				createUser()
-				addTodo(task)
-			}
 			return resp; 
 		})
 		.then(data => {
@@ -161,6 +157,7 @@ const Home = () => {
 		}).then(data => {
 			console.log(data);
 			setTasks([{label: "No tasks here, add tasks"}])
+			createUser()
 		}).catch (error => {
 			console.log(error);
 		})
