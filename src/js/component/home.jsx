@@ -17,12 +17,6 @@ const Home = () => {
 	const addTask = (event) => {
 		if (event.target.value !== "") {
 			if (event.key == "Enter") {
-				if (tasks[0] === "No tasks here, add tasks") {
-					//tasks[0] = newTask;
-					setTasks(newTask)
-				} else {
-					tasks.push(newTask);
-				}
 				addTodo(newTask);
 				setNewTask("")
 				getTodos();
