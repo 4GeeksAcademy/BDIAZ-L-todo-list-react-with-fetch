@@ -37,13 +37,11 @@ const Home = () => {
 			}
 		  })
 		  .then(resp => {
-			  console.log(`resp.ok: ${resp.ok}`); 
-			  console.log(`resp.status: ${resp.status}`); 
+			  console.log(`resp.statusText:` , resp.statusText); 
 			  return resp.json(); 
 		  })
 		  .then(data => {
 			const users = data.users; 
-			console.log("getUsers: ", users)
 			users.find((user) => {return user.name === "bdiaz"}) 
 				? getTodos()
 				: createUser()
@@ -85,12 +83,11 @@ const Home = () => {
 			}
 		  })
 		  .then(resp => {
-			  console.log(`resp.ok: ${resp.ok}`); 
-			  console.log(`resp.status: ${resp.status}`); 
+			  console.log(`resp.statusText:` , resp.statusText); 
 			  return resp.json(); 
 		  })
 		  .then(data => {
-			console.log("data.todos: ", data.todos)
+			console.log(`data:` , data); 
 			data.todos.length === 0 
 				? setTasks([{label: "No tasks here, add tasks"}])
 				: setTasks(data.todos)			
@@ -114,9 +111,7 @@ const Home = () => {
 			}
 		})
 		.then(resp => {
-			console.log(resp.ok); 
-			console.log(resp.status); 
-			console.log(resp.text()); 
+			console.log(`resp.statusText:` , resp.statusText); 
 			return resp; 
 		})
 		.then(data => {
@@ -137,9 +132,7 @@ const Home = () => {
 				"accept": "application/json"
 				}
 		}).then(resp => {
-			console.log(resp.ok); 
-			console.log(resp.status); 
-			console.log(resp.text());
+			console.log(`resp.statusText:` , resp.statusText); 
 			return resp;
 		}).then(data => {
 			console.log(data);
